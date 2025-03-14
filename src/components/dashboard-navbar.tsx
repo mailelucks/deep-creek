@@ -1,31 +1,14 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { ServerSideUser } from "@/lib/auth-server";
+import { logoutAction } from "@/lib/actions";
 
 interface DashboardNavbarProps {
   user: ServerSideUser;
 }
 
 export default function DashboardNavbar({ user }: DashboardNavbarProps) {
-  const router = useRouter();
-
-  const handleLogout = async () => {
-    try {
-      const response = await fetch("/api/auth/logout", {
-        method: "POST",
-      });
-
-      if (response.ok) {
-        router.push("/auth/login");
-        router.refresh(); // Force a refresh to update server components
-      }
-    } catch (error) {
-      console.error("Failed to log out", error);
-    }
-  };
-
   return (
     <nav className="bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -61,12 +44,14 @@ export default function DashboardNavbar({ user }: DashboardNavbarProps) {
           </div>
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <button
-                onClick={handleLogout}
-                className="relative inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
-              >
-                Log out
-              </button>
+              <form action={logoutAction}>
+                <button
+                  type="submit"
+                  className="relative inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+                >
+                  Log out
+                </button>
+              </form>
             </div>
           </div>
         </div>
